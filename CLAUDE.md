@@ -172,6 +172,7 @@ npm run build
 - API 请求统一封装在 `api/plugin.ts`
 - 页面组件放 `pages/`，可复用组件放 `components/`
 - 使用 scoped style 或组件库样式
+- **修改了前端代码（Vue 组件、TS、样式等）后，必须在提交前重新构建**：`cd resources/frontend && npm run build`，确保 `public/assets/` 下的构建产物与源码同步
 
 ## 部署
 
