@@ -1,6 +1,6 @@
 # 📦 siaoynli/plugin-store
 
-基于 [siaoynli/laravel-plugins](https://github.com/siaoynli/laravel-plugins) 插件系统的 **插件市场/仓库管理包**。提供插件的增删改查、Composer 安装、Zip 上传安装、卸载、启用/禁用等完整管理能力。
+基于 [siaoynli/laravel-plugins](https://github.com/siaoynli/laravel-plugins) 插件系统的 **插件市场/仓库管理包**。提供插件的增删改查、Composer 安装、Zip 上传安装、卸载、启用/禁用等完整管理能力。前端为内嵌 Vue3 SPA。
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PHP](https://img.shields.io/badge/PHP-%5E8.2-777BB4.svg)](https://php.net)
@@ -17,33 +17,29 @@
 - **版本管理** — 版本记录 + 最新版本标记 + 更新日志
 - **现代化 UI** — Vue 3 + TypeScript + Naive UI 构建的管理界面
 
-## 📸 界面预览
-
-| 插件列表 | 添加插件 |
-|---------|---------|
-| 搜索筛选、卡片展示、安装/卸载/启用操作 | 表单创建、支持 Composer/Upload 两种方式 |
-
 ## 🚀 快速开始
 
-### 安装
+### 1. 安装
 
 ```bash
 composer require siaoynli/plugin-store
 ```
 
-### 运行迁移
+### 2. 运行迁移
 
 ```bash
 php artisan migrate
 ```
 
-### 发布静态资源
+### 3. 发布静态资源
 
 ```bash
-php artisan vendor:publish --tag=siaoynli-plugin-store-assets
+php artisan vendor:publish --provider="Siaoynli\PluginStore\PluginStorePlugin"
 ```
 
-### 访问管理界面
+> 构建产物会发布到 `public/plugins/plugin-store/` 目录。
+
+### 4. 访问管理界面
 
 浏览器打开 `/plugin-store/` 即可进入插件市场管理后台。
 
@@ -67,29 +63,31 @@ plugin-store/
 │   ├── Http/
 │   │   ├── Controllers/
 │   │   │   ├── PluginController.php     # 插件 CRUD
-│   │   │   ├── PluginInstallController.php  # 安装/卸载
+│   │   │   ├── PluginInstallController.php  # 安装/卸载/上传/同步
 │   │   │   └── CategoryController.php   # 分类管理
-│   │   ├── Requests/                    # 表单验证
-│   │   └── Resources/                   # API 格式化
+│   │   ├── Requests/                    # 表单验证 (3 个)
+│   │   └── Resources/                   # API 格式化 (3 个)
 │   ├── Models/
-│   │   ├── Plugin.php                   # 插件模型
+│   │   ├── Plugin.php                   # 插件模型 (软删除)
 │   │   ├── PluginVersion.php            # 版本模型
 │   │   └── PluginCategory.php           # 分类模型
 │   └── Services/
-│       ├── PluginMarketplaceService.php # 核心业务
+│       ├── PluginMarketplaceService.php # 核心业务逻辑
 │       ├── ComposerInstallerService.php # Composer 安装
-│       └── ZipUploadService.php         # Zip 上传
+│       └── ZipUploadService.php         # Zip 上传解压
 ├── database/migrations/                 # 3 个迁移文件
 ├── routes/
-│   ├── api.php                          # API 路由
-│   └── web.php                          # SPA 路由
-└── resources/
-    ├── views/app.blade.php              # SPA 入口
-    └── frontend/                        # Vue 3 前端
-        └── src/
-            ├── pages/                   # 页面组件
-            ├── components/              # 可复用组件
-            └── api/                     # API 封装
+│   ├── api.php                          # API 路由 (/api/plugin-store/*)
+│   └── web.php                          # SPA catch-all (/plugin-store/*)
+├── resources/
+│   ├── views/app.blade.php              # SPA 入口 Blade 模板
+│   └── frontend/                        # Vue 3 前端
+│       └── src/
+│           ├── pages/                   # 页面组件 (4 个)
+│           ├── components/              # 可复用组件 (2 个)
+│           └── api/                     # API 封装 + TS 类型
+└── public/
+    └── assets/                          # Vite 构建产物
 ```
 
 ## 🔌 API 接口
@@ -100,7 +98,7 @@ plugin-store/
 | `GET` | `/api/plugin-store/plugins/{id}` | 插件详情 |
 | `POST` | `/api/plugin-store/plugins` | 创建插件 |
 | `PUT` | `/api/plugin-store/plugins/{id}` | 更新插件 |
-| `DELETE` | `/api/plugin-store/plugins/{id}` | 删除插件 |
+| `DELETE` | `/api/plugin-store/plugins/{id}` | 删除插件（软删除） |
 | `PATCH` | `/api/plugin-store/plugins/{id}/toggle` | 启用/禁用切换 |
 | `POST` | `/api/plugin-store/install` | Composer 安装 |
 | `POST` | `/api/plugin-store/upload` | Zip 上传安装 |
@@ -116,15 +114,21 @@ plugin-store/
 发布配置文件：
 
 ```bash
-php artisan vendor:publish --tag=siaoynli-plugin-store-config
+php artisan vendor:publish --provider="Siaoynli\PluginStore\PluginStorePlugin"
 ```
 
-配置项说明：
+配置文件位于 `config/plugins/siaoynli-plugin-store.php`：
 
 ```php
 return [
     // 插件是否启用
     'enabled' => env('PLUGIN_STORE_ENABLED', true),
+
+    // 路由前缀
+    'route_prefix' => 'plugin-store',
+
+    // API 中间件
+    'middleware' => ['api'],
 
     // 上传配置
     'upload' => [
@@ -139,6 +143,11 @@ return [
         'binary' => env('COMPOSER_BINARY', 'composer'),
         'timeout' => env('COMPOSER_TIMEOUT', 300),  // 秒
         'working_dir' => null,  // 默认 base_path
+    ],
+
+    // 自动发现
+    'discovery' => [
+        'auto_sync' => env('PLUGIN_STORE_AUTO_SYNC', true),
     ],
 ];
 ```
@@ -166,9 +175,11 @@ npm install
 # 开发模式（HMR，端口 5174）
 npm run dev
 
-# 构建
+# 构建（输出到 public/assets/）
 npm run build
 ```
+
+> **注意**：修改前端代码（Vue 组件、TS、样式等）后，必须在提交前重新执行 `npm run build`，确保 `public/assets/` 下的构建产物与源码同步。
 
 ## 📦 添加插件到市场
 
@@ -221,4 +232,4 @@ php artisan plugin:list
 
 ## 📄 许可证
 
-[MIT License](LICENSE)
+MIT License
