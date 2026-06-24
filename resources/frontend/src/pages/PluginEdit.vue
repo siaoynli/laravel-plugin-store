@@ -193,6 +193,11 @@ async function fetchPlugin() {
         const id = Number(route.params.id)
         const res = await pluginApi.show(id)
         plugin.value = res.data.data
+        if (!plugin.value) {
+            message.error('加载插件信息失败')
+            router.back()
+            return
+        }
 
         Object.assign(form, {
             package_name: plugin.value.package_name,

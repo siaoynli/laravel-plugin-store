@@ -7,8 +7,6 @@
     <title>插件市场 — {{ config('app.name', 'Laravel') }}</title>
     @if(app()->environment('local'))
         @vite(['resources/frontend/src/main.ts'], 'plugins/plugin-store')
-    @else
-        <link rel="stylesheet" href="{{ asset('plugins/plugin-store/assets/index.css') }}">
     @endif
 </head>
 <body>
