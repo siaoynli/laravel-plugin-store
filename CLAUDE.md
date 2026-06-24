@@ -58,7 +58,8 @@ laravel-plugin-store/
 │           └── components/
 │               ├── PluginCard.vue          # 插件卡片
 │               └── VersionTag.vue          # 版本标签
-└── public/                                 # Vite build 产物
+└── resources/
+    └── assets/                             # Vite build 产物（由框架 PluginPublisher 自动发布）
 ```
 
 ## 数据库表
@@ -152,7 +153,7 @@ npm install
 # 开发模式 (HMR, 端口 5174)
 npm run dev
 
-# 构建 (输出到 public/)
+# 构建 (输出到 resources/assets/)
 npm run build
 ```
 
@@ -172,7 +173,7 @@ npm run build
 - API 请求统一封装在 `api/plugin.ts`
 - 页面组件放 `pages/`，可复用组件放 `components/`
 - 使用 scoped style 或组件库样式
-- **修改了前端代码（Vue 组件、TS、样式等）后，必须在提交前重新构建**：`cd resources/frontend && npm run build`，确保 `public/assets/` 下的构建产物与源码同步
+- **修改了前端代码（Vue 组件、TS、样式等）后，必须在提交前重新构建**：`cd resources/frontend && npm run build`，确保 `resources/assets/` 下的构建产物与源码同步
 
 ## 部署
 

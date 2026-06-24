@@ -4,23 +4,23 @@ import { resolve } from 'path'
 
 export default defineConfig({
     plugins: [vue()],
-    base: '/plugins/plugin-store/',
+    base: '/plugins/siaoynli-plugin-store/',
     resolve: {
         alias: {
             '@': resolve(__dirname, 'src'),
         },
     },
     build: {
-        outDir: '../../public',
+        outDir: '../../resources/assets',
         emptyOutDir: true,
         rollupOptions: {
             input: {
                 index: resolve(__dirname, 'src/main.ts'),
             },
             output: {
-                entryFileNames: 'assets/index.js',
-                chunkFileNames: 'assets/[name]-[hash].js',
-                assetFileNames: 'assets/[name].[ext]',
+                entryFileNames: '[name].js',
+                chunkFileNames: '[name]-[hash].js',
+                assetFileNames: '[name].[ext]',
             },
         },
     },

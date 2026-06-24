@@ -34,10 +34,15 @@ php artisan migrate
 ### 3. 发布静态资源
 
 ```bash
-php artisan vendor:publish --provider="Siaoynli\PluginStore\PluginStorePlugin"
+# 发布全部资源
+php artisan vendor:publish --tag=siaoynli-plugin-store-assets
+
+# 或按需单独发布
+php artisan vendor:publish --tag=siaoynli-plugin-store-config
+php artisan vendor:publish --tag=siaoynli-plugin-store-migrations
 ```
 
-> 构建产物会发布到 `public/plugins/plugin-store/` 目录。
+> 前端构建产物发布到 `public/plugins/siaoynli-plugin-store/` 目录。
 
 ### 4. 访问管理界面
 
@@ -81,13 +86,12 @@ plugin-store/
 │   └── web.php                          # SPA catch-all (/plugin-store/*)
 ├── resources/
 │   ├── views/app.blade.php              # SPA 入口 Blade 模板
+│   ├── assets/                          # Vite 构建产物（由框架自动发布）
 │   └── frontend/                        # Vue 3 前端
 │       └── src/
 │           ├── pages/                   # 页面组件 (4 个)
 │           ├── components/              # 可复用组件 (2 个)
 │           └── api/                     # API 封装 + TS 类型
-└── public/
-    └── assets/                          # Vite 构建产物
 ```
 
 ## 🔌 API 接口
@@ -175,11 +179,11 @@ npm install
 # 开发模式（HMR，端口 5174）
 npm run dev
 
-# 构建（输出到 public/assets/）
+# 构建（输出到 resources/assets/）
 npm run build
 ```
 
-> **注意**：修改前端代码（Vue 组件、TS、样式等）后，必须在提交前重新执行 `npm run build`，确保 `public/assets/` 下的构建产物与源码同步。
+> **注意**：修改前端代码（Vue 组件、TS、样式等）后，必须在提交前重新执行 `npm run build`，确保 `resources/assets/` 下的构建产物与源码同步。
 
 ## 📦 添加插件到市场
 

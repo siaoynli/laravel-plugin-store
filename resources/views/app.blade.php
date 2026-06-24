@@ -6,7 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>插件市场 — {{ config('app.name', 'Laravel') }}</title>
     @if(app()->environment('local'))
-        @vite(['resources/frontend/src/main.ts'], 'plugins/plugin-store')
+        <script type="module" src="http://localhost:5174/@vite/client"></script>
+        <script type="module" src="http://localhost:5174/src/main.ts"></script>
     @endif
 </head>
 <body>
@@ -19,7 +20,7 @@
         };
     </script>
     @if(!app()->environment('local'))
-        <script type="module" src="{{ asset('plugins/plugin-store/assets/index.js') }}"></script>
+        <script type="module" src="{{ asset('plugins/siaoynli-plugin-store/index.js') }}"></script>
     @endif
 </body>
 </html>

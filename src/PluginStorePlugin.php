@@ -93,19 +93,4 @@ class PluginStorePlugin extends AbstractPlugin
     {
         app('view')->addNamespace($namespace, $path);
     }
-
-    /**
-     * 声明可发布资源
-     */
-    public function publish(): array
-    {
-        return [
-            // 前端 dist 到 public
-            $this->getBasePath() . '/public' => public_path('plugins/plugin-store'),
-            // 配置文件
-            $this->getBasePath() . '/config/plugin.php' => config_path('plugins/siaoynli-plugin-store.php'),
-            // 迁移文件
-            $this->getBasePath() . '/database/migrations' => database_path('migrations'),
-        ];
-    }
 }
