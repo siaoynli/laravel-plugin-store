@@ -79,23 +79,19 @@ class PluginStorePlugin extends AbstractPlugin
     }
 
     /**
-     * 从 ServiceProvider 加载迁移
+     * 注册迁移路径到 Migrator
      */
     protected function loadMigrationsFrom(string $path): void
     {
-        $this->app->afterResolving('migrator', function ($migrator) use ($path) {
-            $migrator->path($path);
-        });
+        app('migrator')->path($path);
     }
 
     /**
-     * 从 ServiceProvider 加载视图
+     * 注册视图命名空间
      */
     protected function loadViewsFrom(string $path, string $namespace): void
     {
-        $this->app->afterResolving('view', function ($view) use ($path, $namespace) {
-            $view->addNamespace($namespace, $path);
-        });
+        app('view')->addNamespace($namespace, $path);
     }
 
     /**
