@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>插件市场 — {{ config('app.name', 'Laravel') }}</title>
-    @if(app()->environment('local'))
-        <script type="module" src="http://localhost:5174/@vite/client"></script>
-        <script type="module" src="http://localhost:5174/src/main.ts"></script>
-    @endif
 </head>
 <body>
     <div id="app"></div>
@@ -19,8 +15,6 @@
             user: @json(auth()->user()?->only('id', 'name')),
         };
     </script>
-    @if(!app()->environment('local'))
-        <script type="module" src="{{ asset('plugins/siaoynli-plugin-store/index.js') }}"></script>
-    @endif
+    <script type="module" src="{{ asset('plugins/siaoynli-plugin-store/index.js') }}"></script>
 </body>
 </html>

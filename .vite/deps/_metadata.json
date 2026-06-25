@@ -1,0 +1,34 @@
+{
+  "hash": "66835cb3",
+  "configHash": "c000938e",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "7f1fc6b9",
+  "optimized": {
+    "vue-router": {
+      "src": "../../resources/frontend/node_modules/vue-router/dist/vue-router.mjs",
+      "file": "vue-router.js",
+      "fileHash": "77f9c64f",
+      "needsInterop": false
+    },
+    "naive-ui": {
+      "src": "../../resources/frontend/node_modules/naive-ui/es/index.mjs",
+      "file": "naive-ui.js",
+      "fileHash": "1ececa63",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../resources/frontend/node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "dae56505",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-ZAQI3PED": {
+      "file": "chunk-ZAQI3PED.js"
+    },
+    "chunk-UVKRO5ER": {
+      "file": "chunk-UVKRO5ER.js"
+    }
+  }
+}

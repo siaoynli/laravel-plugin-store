@@ -46,12 +46,14 @@
 <script setup lang="ts">
 import { computed, ref, h } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useMessage } from 'naive-ui'
+import { createDiscreteApi } from 'naive-ui'
 import { pluginApi } from './api/plugin'
+
+// 根组件无法注入自身的 provider，使用 Discrete API 代替 useMessage()
+const { message } = createDiscreteApi(['message'])
 
 const router = useRouter()
 const route = useRoute()
-const message = useMessage()
 const refreshing = ref(false)
 
 const themeOverrides = {
